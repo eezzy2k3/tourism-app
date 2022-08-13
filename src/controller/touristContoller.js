@@ -94,7 +94,7 @@ const createTourist =asyncHandler( async (req,res,next)=>{
       
        
         // if no tourist
-       if(!tourist) return next(new ErrorResponse("No tourist center found",400))
+       if(!tourist) return next(new ErrorResponse("No tourist center found",404))
       
        res.status(200).json({success:true,Total:tourist.length,pagination,data:tourist})
    })
@@ -108,7 +108,7 @@ const createTourist =asyncHandler( async (req,res,next)=>{
         const tourist =await Tourist.findById(req.params.id)
        
         // if no tourist
-        if(!tourist) return next(new ErrorResponse("No tourist center found",400))
+        if(!tourist) return next(new ErrorResponse("No tourist center found",404))
       
         res.status(200).json({success:true,data:tourist})
     })
@@ -128,7 +128,7 @@ const createTourist =asyncHandler( async (req,res,next)=>{
         tourist =await Tourist.findOneAndUpdate(req.params.id,req.body,{new:true})
        
         // if no tourist
-       if(!tourist) return next(new ErrorResponse("No tourist center found",400))
+       if(!tourist) return next(new ErrorResponse("No tourist center found",404))
        
        res.status(200).json({success:true,data:tourist})
     })
@@ -148,7 +148,7 @@ const createTourist =asyncHandler( async (req,res,next)=>{
         tourist = await Tourist.findOneAndDelete(req.params.id)
        
         // if no tourist
-       if(!tourist) return next(new ErrorResponse("No tourist center found",400))
+       if(!tourist) return next(new ErrorResponse("No tourist center found",404))
        
        res.status(200).json({success:true,message:`you have suucessfully deleted tourist center with id ${req.params.id}`})
     })

@@ -1,8 +1,9 @@
 require("dotenv").config()
 const touristRouter = require("./src/router/touristRoute")
-const userRouter = require("./src/router/userRoute")
+const authRouter = require("./src/router/authRoute")
 const bookingRouter = require("./src/router/bookingRoute")
 const reviewRouter = require("./src/router/reviewRoute")
+const usersRouter = require("./src/router/userRoute")
 const errorHandler = require("./src/middleware/errorHandler")
 const cookieParser = require("cookie-parser")
 
@@ -14,9 +15,10 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use("/api/v1/tourist",touristRouter)
-app.use("/api/v1/user",userRouter)
+app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/booking",bookingRouter)
 app.use("/api/v1/reviews",reviewRouter)
+app.use("/api/v1/users",usersRouter)
 
 app.use(errorHandler)
 

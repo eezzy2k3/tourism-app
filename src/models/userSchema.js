@@ -21,6 +21,12 @@ const userSchema = mongoose.Schema({
         enum:["admin","user","publisher"],
         default:"user"
     },
+    status:{
+        type:String,
+        enum:["active","pending"],
+        default:"pending"
+    },
+    verifyToken:String,
     resetToken:String,
     resetTokenExpire:Date
 },{timestamps:true})

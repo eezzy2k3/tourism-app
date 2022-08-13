@@ -1,22 +1,18 @@
-const {register,logIn,delet,changePassword,getUser, generateToken, resetPassword} = require("../controller/user")
+const  {register,getUser,deleteuser,updateUser,getAllUser} = require("../controller/user")
 const authorize = require("../middleware/auth")
 const express = require('express')
-// const cookieParser = require("cookie-parser")
+
 
 
 const router = express.Router()
-// router.use(cookieParser())
-router.route("/")
 
-.post(register)
-.delete(authorize,delet)
+router.route("/:id")
 .get(authorize,getUser)
-router.post("/login",logIn)
-router.put("/changepassword",authorize,changePassword)
-router.post("/resetpassword",generateToken)
-router.put("/resetpassword/:token",resetPassword)
+.delete(authorize,deleteuser)
+.put(authorize,updateUser)
 
-
-
+router.route("/")
+.get(authorize,getAllUser)
+.post(authorize,register)
 
 module.exports = router

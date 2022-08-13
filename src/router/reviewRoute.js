@@ -1,4 +1,4 @@
-const {createReview,getReviews,touristReview, updateReview, deleteReview} = require("../controller/reviewcontroller")
+const {createReview,getReviews,updateReview, deleteReview, getSingleReview} = require("../controller/reviewcontroller")
 const authorize = require("../middleware/auth")
 const express = require("express")
 
@@ -14,10 +14,10 @@ router.use(authorize)
 router.route("/")
 .get(getReviews)
 .post(createReview)
-.get(touristReview)
 
-router.route("/:touristId")
+router.route("/:id")
 .put(updateReview)
 .delete(deleteReview)
+.get(getSingleReview)
 
 module.exports = router

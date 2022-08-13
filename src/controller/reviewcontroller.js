@@ -12,14 +12,21 @@ const createReview = asyncHandler(async(req,res,next)=>{
     const user = req.user.id
 
     // only user and admin can create review
-    if(req.user.role != "user" && req.user.role != "admin") return next(new ErrorResponse("unauthorize",400))
+    if(req.user.role != "user" && req.user.role != "admin") return next(new ErrorResponse("unauthorize",401))
 
     // check if tourist exist
     const checkTourist = await Tourist.findById(tourist)
    
     if(!checkTourist) return next(new ErrorResponse(`no tourist with id ${tourist}`,404))
+  
+    // cant make more than one review fora tourist site
+   let review = await Review.findOne({tourist,user})
 
-    req.body.tourist = tourist
+
+   if(review)  return next(new ErrorResponse(`you cant make more than one review for ${tourist}`,401))
+
+   
+   req.body.tourist = tourist
     req.body.user = user
 
     // create new review
@@ -29,21 +36,14 @@ const createReview = asyncHandler(async(req,res,next)=>{
 })
 
 // desc => get all review
-// route => GET/api/v1/reviews
-
-const getReviews = asyncHandler(async(req,res,next)=>{
-   
-    // get all review in DB
-    const reviews =await Review.find({}).populate({path:"tourist",select:"touristCenter description"})
-
-    res.status(201).json({success:true,count:reviews.length,data:reviews})
-})
-
-
+// route => GET/api/v1/reviews &&
 // desc => get all review for a tourist center
 // route => GET/api/v1/tourist/:touristId/review
 
-const touristReview = asyncHandler(async(req,res,next)=>{
+const getReviews = asyncHandler(async(req,res,next)=>{
+    
+    //  get all review for a tourist center
+     if(req.params.touristId){
     const tourist = req.params.touristId
 
     // check if tourist center exist
@@ -51,12 +51,18 @@ const touristReview = asyncHandler(async(req,res,next)=>{
    
     if(!checkTourist) return next(new ErrorResponse(`no tourist with id ${tourist}`,404))
 
-    // get review for a specific tourist center
+    // get all review for a specific tourist center
     const reviews = await Review.find({tourist}).populate({path:"tourist",select:"touristCenter description"})
 
 
+    return res.status(200).json({success:true,count:reviews.length,data:reviews})
+    }
+    // get all review in DB
+    const reviews =await Review.find({}).populate({path:"tourist",select:"touristCenter description"})
+
     res.status(200).json({success:true,count:reviews.length,data:reviews})
 })
+
 
 // desc => update review
 // route => put/api/v1/reviews/:touristId
@@ -64,16 +70,30 @@ const touristReview = asyncHandler(async(req,res,next)=>{
 const updateReview = asyncHandler(async(req,res,next)=>{
 
     // get the review from db
-    let review = await Review.findById(req.params.touristId)
+    let review = await Review.findById(req.params.id)
    
     // check if the review is in DB
-    if(!review) return next(new ErrorResponse(`no review with id ${req.params.touristId}`,404))
+    if(!review) return next(new ErrorResponse(`no review with id ${req.params.id}`,404))
 
     // check the creator is the one updating
     if(req.user.id!=review.user)return next(new ErrorResponse(`you cant update review you did not create`,401))
     
     // update review
-     review = await Review.findByIdAndUpdate(req.params.touristId,req.body,{new:true})
+     review = await Review.findByIdAndUpdate(req.params.id,req.body,{new:true})
+
+     res.status(200).json({success:true,data:review})
+
+    
+})
+
+const getSingleReview = asyncHandler(async(req,res,next)=>{
+
+    // get the review from db
+    let review = await Review.findById(req.params.id)
+   
+    // check if the review is in DB
+    if(!review) return next(new ErrorResponse(`no review with id ${req.params.id}`,404))
+    
 
      res.status(200).json({success:true,data:review})
 
@@ -83,18 +103,18 @@ const updateReview = asyncHandler(async(req,res,next)=>{
 const deleteReview = asyncHandler(async(req,res,next)=>{
 
     // get the review from db
-    let review = await Review.findById(req.params.touristId)
+    let review = await Review.findById(req.params.id)
    
     // check if the review is in DB
-    if(!review) return next(new ErrorResponse(`no review with id ${req.params.touristId}`,404))
+    if(!review) return next(new ErrorResponse(`no review with id ${req.params.id}`,404))
 
     // check the creator is the one updating
     if(req.user.id!=review.user)return next(new ErrorResponse(`you cant delete review you did not create`,401))
     
-    // update review
-     await Review.findByIdAndDelete(req.params.touristId)
-
-     res.status(200).json({success:true,msg:`successfully deleted review with id${req.params.touristId}`})
+    // delete review
+    review.remove()
+    
+    res.status(200).json({success:true,msg:`successfully deleted review with id${req.params.id}`})
 
     
 })
@@ -102,5 +122,5 @@ const deleteReview = asyncHandler(async(req,res,next)=>{
 
 
 
-module.exports = {createReview,getReviews,touristReview,updateReview,deleteReview}
+module.exports = {createReview,getReviews,updateReview,deleteReview,getSingleReview}
 
