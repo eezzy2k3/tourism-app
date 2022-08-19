@@ -1,7 +1,7 @@
 # Tourist app
 
 
-> The tourist api is an app built with express node js and uses mongodb to store data..
+> The tourist api is an api built with express node js and uses mongodb to store data..
 
 ## Features
 
