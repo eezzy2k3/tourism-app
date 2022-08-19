@@ -11,3 +11,6 @@
 - make bookings and get booking confirmation by mail
 - full admin crud functionality
 - full user crud functionality
+
+
+[This is a link to the documentation]([https://www.genome.gov](https://documenter.getpostman.com/view/20496357/VUqoPdPT)/)
