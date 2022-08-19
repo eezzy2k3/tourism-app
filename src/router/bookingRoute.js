@@ -1,5 +1,5 @@
 const {createBookings,getABooking,getBooking} = require("../controller/bookings")
-const authorize = require("../middleware/auth")
+const  {authorize} = require("../middleware/auth")
 const express = require('express')
 
 

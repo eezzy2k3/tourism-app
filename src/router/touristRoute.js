@@ -1,5 +1,5 @@
 const {createTourist, getAllTourist, getSingleTourist, updateTourist, deleteTourist, getTouristByDistance }= require("../controller/touristContoller")
-const authorize = require("../middleware/auth")
+const  {authorize} = require("../middleware/auth")
 const express = require('express')
 
 

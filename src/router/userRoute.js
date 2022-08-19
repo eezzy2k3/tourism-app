@@ -1,18 +1,20 @@
 const  {register,getUser,deleteuser,updateUser,getAllUser} = require("../controller/user")
-const authorize = require("../middleware/auth")
+const  {authorize,accesss} = require("../middleware/auth")
 const express = require('express')
 
 
 
 const router = express.Router()
+router.use(authorize)
+router.use(accesss("admin"))
 
 router.route("/:id")
-.get(authorize,getUser)
-.delete(authorize,deleteuser)
-.put(authorize,updateUser)
+.get(getUser)
+.delete(deleteuser)
+.put(updateUser)
 
 router.route("/")
-.get(authorize,getAllUser)
-.post(authorize,register)
+.get(getAllUser)
+.post(register)
 
 module.exports = router

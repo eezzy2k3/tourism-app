@@ -19,7 +19,7 @@ const createBookings = asyncHandler(async(req,res,next)=>{
     const bookingNumber = Math.floor((Math.random()*1000000)+1)
    
     const owner = req.user.id
-    
+    console.log(owner)
     // check if a booking exist
     let booking = await Bookings.findOne({email}).populate({path:"owner",select:"name"})
 
@@ -116,6 +116,7 @@ const createBookings = asyncHandler(async(req,res,next)=>{
 const getBooking = asyncHandler(async(req,res,next)=>{
    
     const owner  = req.user.id 
+    console.log(owner)
    
     const booking = await Bookings.findOne({owner}).populate({path:"owner",select:"name"})
    
@@ -136,12 +137,12 @@ const getABooking = asyncHandler(async(req,res,next)=>{
     let booking = await Bookings.findOne({owner})
     
     // check for reservation
-    const booikingIndex = booking.reservation.findIndex((findTourist)=>findTourist.bookingNumber === bookingNumber)
+    const bookingIndex = booking.reservation.findIndex((findTourist)=>findTourist.bookingNumber === bookingNumber)
    
     // check if reservation does not exist
-    if(booikingIndex<0) return next(new ErrorResponse(`No booking with booking number ${bookingNumber} `,400))
+    if(bookingIndex<0) return next(new ErrorResponse(`No booking with booking number ${bookingNumber} `,400))
    
-    booking = booking.reservation[booikingIndex]
+    booking = booking.reservation[bookingIndex]
    
     res.status(200).json({success:true,data:booking})
 })

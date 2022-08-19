@@ -83,7 +83,7 @@ const sendCookie = (user,statusCode,res)=>{
     const token = jwt.sign({id:user._id,email:user.email,role:user.role},process.env.JWT_SECRET,{expiresIn:"30d"})
  
     const options = ({
-     expires:new Date(Date.now()+2592000),
+     expires:new Date(Date.now()+2592000000),
      httpOnly:true
  })
 
@@ -164,7 +164,8 @@ const generateToken = asyncHandler(async(req,res,next)=>{
    
     user.resetToken = resetToken
    
-    user.resetTokenExpire = Date.now()+86400000
+    // expires in 10 minutes
+    user.resetTokenExpire = Date.now()+600000
    
     await user.save()
   
@@ -188,7 +189,7 @@ const generateToken = asyncHandler(async(req,res,next)=>{
         
     }
     
-    res.status(200).json({success:true,message:"token sent",data:user.resetToken})
+    res.status(200).json({success:true,message:"token sent"})
 
 
 })
@@ -294,4 +295,17 @@ const verifyMail = asyncHandler(async(req,res,next)=>{
 })
 
 
-module.exports = {register,logIn,delet,changePassword,getUser,generateToken,resetPassword,updateUser,verifyMail}
+// desc => logout user/clear cookies
+// route => GET/api/v1/auth/logout
+
+const logout = asyncHandler(async(req,res,next)=>{
+    res.cookie("token","none",{
+        expires:new Date(Date.now()+10000),
+        httpOnly:true
+    })
+    res.status(200).json({success:true,data:{}})
+})
+
+
+
+module.exports = {register,logIn,delet,changePassword,getUser,generateToken,resetPassword,updateUser,verifyMail,logout}

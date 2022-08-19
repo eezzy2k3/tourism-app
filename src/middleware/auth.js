@@ -18,4 +18,14 @@ const authorize = (req,res,next)=>{
     next()
 }
 
-module.exports = authorize
+
+const accesss = (...roles)=>{
+    return (req,res,next)=>{
+        if(!roles.includes(req.user.role)){
+            return next(new ErrorResponse(`the ${req.user.role} is not authorized to visit this route`,403))
+        }
+        next()
+    }
+}
+
+module.exports = {authorize,accesss}
