@@ -19,7 +19,7 @@ const createBookings = asyncHandler(async(req,res,next)=>{
     const bookingNumber = Math.floor((Math.random()*1000000)+1)
    
     const owner = req.user.id
-    console.log(owner)
+    
     // check if a booking exist
     let booking = await Bookings.findOne({email}).populate({path:"owner",select:"name"})
 
@@ -116,7 +116,7 @@ const createBookings = asyncHandler(async(req,res,next)=>{
 const getBooking = asyncHandler(async(req,res,next)=>{
    
     const owner  = req.user.id 
-    console.log(owner)
+    
    
     const booking = await Bookings.findOne({owner}).populate({path:"owner",select:"name"})
    
