@@ -13,4 +13,4 @@
 - full user crud functionality
 
 
-[This is a link to the documentation]([https://www.genome.gov](https://documenter.getpostman.com/view/20496357/VUqoPdPT)/)
+[This is a link to the documentation](https://documenter.getpostman.com/view/20496357/VUqoPdPT)
