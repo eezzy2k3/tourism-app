@@ -2,6 +2,7 @@
 
 
 > The tourist api is an api built with express node js and uses mongodb to store data..
+An Api that allows tourist check the closest tourist center to them,make bookings and get booking confirmation in their email,make reviews for all center tourist visited,make a decision by viewing reviews of others.
 
 ## Features
 
