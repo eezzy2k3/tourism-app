@@ -122,7 +122,7 @@ const createTourist =asyncHandler( async (req,res,next)=>{
         let tourist = await Tourist.findById(req.params.id)
       
         // another user cannot delete what he did not create
-        if(tourist.user !== req.user.id && req.user.role !== "admin") return next(new ErrorResponse(`Not authorize to update`,401))
+        if(tourist.owner != req.user.id && req.user.role !== "admin") return next(new ErrorResponse(`Not authorize to update`,401))
        
        // update tourist center   
         tourist =await Tourist.findOneAndUpdate(req.params.id,req.body,{new:true})
@@ -142,7 +142,7 @@ const createTourist =asyncHandler( async (req,res,next)=>{
         let tourist = await Tourist.findById(req.params.id)
        
         // another user cannot delete what he did not create
-        if(tourist.user !== req.user.id && req.user.role !== "admin") return next(new ErrorResponse(`Not authorize to update`,401))
+        if(tourist.owner != req.user.id && req.user.role !== "admin") return next(new ErrorResponse(`Not authorize to update`,401))
         
         // find tourist center and delete from DB
         tourist = await Tourist.findOneAndDelete(req.params.id)

@@ -15,7 +15,7 @@ const register = asyncHandler(async(req,res,next)=>{
     // check if email already exist
     const findUser =await User.findOne({email})
    
-    if(findUser) return next(new ErrorResponse(`The email ${email} already exist`,404))
+    if(findUser) return next(new ErrorResponse(`The email ${email} already exist`,400))
     //    hash the password
     password = await bcrypt.hash(password,12)
 
@@ -55,7 +55,7 @@ const logIn = asyncHandler(async(req,res,next)=>{
     const {email,password} = req.body
 
     //    check for empty field(email,password)
-    if(!email||!password) return next(new ErrorResponse(`enter email and password`,404))
+    if(!email||!password) return next(new ErrorResponse(`enter email and password`,400))
    
    //    get a user from DB
     const user =await User.findOne({email}).select("+password")
@@ -67,7 +67,7 @@ const logIn = asyncHandler(async(req,res,next)=>{
     const checkPassword =await bcrypt.compare(password,user.password)
    
     //  if no matching password 
-    if(!checkPassword) return next(new ErrorResponse(`Invalid credentials`,404))
+    if(!checkPassword) return next(new ErrorResponse(`Invalid credentials`,401))
 
     
      // check if mail is active
@@ -222,7 +222,7 @@ const resetPassword = asyncHandler(async(req,res,next)=>{
     //  save modifications
     await user.save()
    
-    res.status(201).json({success:true,msg:"password reset successful"})
+    res.status(200).json({success:true,msg:"password reset successful"})
 })
 
 // desc => create a new user
@@ -254,7 +254,7 @@ const updateUser = asyncHandler(async(req,res,next)=>{
         await user.save()
 
          //   create a message 
-    const message = `click on the link to reset password :\n\n ${req.protocol}://${req.get("host")}/api/v1/user/verifymail/${user.verifyToken}`
+    const message = `click on the link to verify mail:\n\n ${req.protocol}://${req.get("host")}/api/v1/user/verifymail/${user.verifyToken}`
   
     //    send token to mail
     try {
